@@ -5,3 +5,5 @@ gradientai
 torch
 sentencepiece
 accelerate
+streamlit-option-menu
+streamlit-card
