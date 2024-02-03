@@ -1,0 +1,7 @@
+streamlit
+python-dotenv
+llama_index
+gradientai
+torch
+sentencepiece
+accelerate
