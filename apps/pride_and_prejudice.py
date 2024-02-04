@@ -6,15 +6,42 @@ from llama_index import StorageContext,load_index_from_storage
 from llama_index.embeddings import GradientEmbedding
 from dotenv import load_dotenv
 from llama_index import ServiceContext,set_global_service_context
-
+from streamlit_card import card
+import base64
 def app():
     st.markdown("""### Pride and Prejudice """)
+
+    res = card(
+        title="Pride and Prejudice",
+        text="The second novel by English author Jane Austen, published in 1813",
+        image="https://th.bing.com/th/id/OIP.wcZjPkH4FZD5QYi_2kfxxAAAAA?rs=1&pid=ImgDetMain",
+        styles={
+            "card": {
+                "width": "500px",
+                "height": "500px",
+                "border-radius": "0px",
+                "box-shadow": "0 0 10px rgba(0,0,0,0.5)",
+            },
+            "text": {
+                "font-family": "serif",
+            }
+        }
+    )
+
     def configure():
         load_dotenv()
 
     configure()
 
-    inp = st.text_input("input",key=100)
+    def show_pdf(file):
+        with open(file, "rb") as f:
+            base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+        pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="800" height="800" type="application/pdf"></iframe>'
+        st.markdown(pdf_display, unsafe_allow_html=True)
+
+    show_pdf('pridePrejudice.pdf')
+
+    inp = st.text_input("input")
     try:
         if inp is not None:
             llm = GradientBaseModelLLM(
@@ -42,3 +69,7 @@ def app():
                 st.write(response.response)
     except:
         pass
+
+
+
+

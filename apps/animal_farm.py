@@ -6,15 +6,42 @@ from llama_index import StorageContext,load_index_from_storage
 from llama_index.embeddings import GradientEmbedding
 from dotenv import load_dotenv
 from llama_index import ServiceContext,set_global_service_context
-
+from streamlit_card import card
+import base64
 def app():
     st.markdown("""### Animal Farm """)
+
+    res = card(
+        title="Animal Farm",
+        text="A satirical allegorical novella, by George Orwell, published in 1945.",
+        image="https://images.thenile.io/r1000/9780582434479.jpg",
+        styles={
+            "card": {
+                "width": "500px",
+                "height": "500px",
+                "border-radius": "0px",
+                "box-shadow": "0 0 10px rgba(0,0,0,0.5)",
+            },
+            "text": {
+                "font-family": "serif",
+            }
+        }
+    )
+
     def configure():
         load_dotenv()
 
     configure()
 
-    inp = st.text_input("input",key=101)
+    def show_pdf(file):
+        with open(file, "rb") as f:
+            base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+        pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="800" height="800" type="application/pdf"></iframe>'
+        st.markdown(pdf_display, unsafe_allow_html=True)
+
+    show_pdf('animal_farm.pdf')
+
+    inp = st.text_input("input")
     try:
         if inp is not None:
             llm = GradientBaseModelLLM(
